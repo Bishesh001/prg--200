@@ -1,28 +1,27 @@
-floors = 10
-count = 1
+# Input
+previous_reading = float(input("Enter previous meter reading: "))
+current_reading = float(input("Enter current meter reading: "))
+rate_per_unit = float(input("Enter rate per unit: "))
+service_charge = float(input("Enter monthly service charge: "))
 
-while count <= floors:
-    print("\nFloor", count)
+# Calculate units consumed
+units = current_reading - previous_reading
 
-    shop = input("Enter shop name: ")
-    units = int(input("Enter electricity units: "))
+# Basic bill amount
+bill = units * rate_per_unit
 
-    if units <= 30:
-        rate = 10
-    elif units <= 50:
-        rate = 12
-    elif units <= 70:
-        rate = 14
-    elif units <= 100:
-        rate = 16
-    else:
-        rate = 20
+# Extra charge after 50 units
+if units > 50:
+    extra_charge = bill * 0.10   # 10% extra charge
+else:
+    extra_charge = 0
 
-    bill = units * rate
+# Total bill
+total_bill = bill + extra_charge + service_charge
 
-    print("Shop Name:", shop)
-    print("Units:", units)
-    print("Rate: Rs", rate, "per unit")
-    print("Bill: Rs", bill)
-
-    count = count + 1
+# Output
+print("Units Consumed:", units)
+print("Basic Bill:", bill)
+print("Extra Charge:", extra_charge)
+print("Service Charge:", service_charge)
+print("Total Electricity Bill:", total_bill)
