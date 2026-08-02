@@ -1,0 +1,56 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import  seaborn as sns
+
+df = pd.read_csv(r"C:\Users\NIC\Downloads\nepal_bank_transactions.csv")
+print(df.columns)
+df['date'] = pd.to_datetime(df['date'])
+
+print(df.head())
+sns.set_style (style="whitegrid")
+plt.rcParams['figure.figsize'] = (12, 6)
+df['year_months'] = df['date'].dt.to_period('M').astype(str)
+df.head(2)
+df.info()
+df['year_months'] = pd.to_datetime(df['year_months'])
+
+channel_counts = df["channel"].value_counts()
+plt.figure()
+sns.barplot(x=channel_counts.index, y=channel_counts.values, hue=channel_counts.index, palette= "viridis", legend=False)
+plt.title("Transaction Count by Channel")
+plt.xlabel("Channel")
+plt.ylabel("Number of Transactions")
+plt.xticks(rotation=20)
+plt.tight_layout()
+plt.show()
+
+
+monthly = df.groupby('year_months').size()
+plt.figure()
+plt,plt.plot(monthly.index, monthly.values, marker= "o" , colors= "blue")
+plt.title("Monthly Transaction volume, 2024")
+plt.xlabel("Month")
+plt.ylabel("Number of Transactions")
+plt.xticks(rotation=45)
+plt.axvspan("2024-01-01", "2024-03-31", color="yellow", alpha=0.3, label="Dhasai? tihar")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+plt.figure()
+sns.boxplot(data=df, x='channel', y='processing_time_ms',hue='channel', palette="Set2, legend = False")
+plt.title("Processing Time by Channel")
+plt.xlabel("Channel")
+plt.ylabel("Processing Time (ms)")
+plt.xticks(rotation=20)
+plt.tight_layout()  
+plt.show()
+
+pivot_table = df.crosstab(df['channel'], df['transaction_status'])
+plt.figure()
+sns.heatmap(pivot_table, annot=True, fmt='d', cmap='YlGnBu')
+plt.title("Transaction Status by Channel")
+plt.xlabel("Transaction Status")
+plt.ylabel("Channel")
+plt.tight_layout()
+plt.show()
